@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 
 
+#Provide the poster image of the recommended movie (source: TMDB)
 def fetch_poster(movie_id):
     response = requests.get(
         'https://api.themoviedb.org/3/movie/{}?api_key=2e1991e930b040336c2a7cafa601bc87&language=en-US'.format(
@@ -12,6 +13,7 @@ def fetch_poster(movie_id):
     return "https://image.tmdb.org/t/p/w500/" + data['poster_path']
 
 
+#Function to provide recommendation of movie
 def recommend(movie):
     movie_index = movies[movies['title'] == movie].index[0]
     distance = similarity[movie_index]
@@ -28,12 +30,13 @@ def recommend(movie):
 
     return recommended_movies, recommended_movies_posters
 
-
+#Uploading datasets 
 movies_dict = pickle.load(open("movie_dict.pkl", "rb"))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open("similarity.pkl", "rb"))
 st.title('Movie Recommender System')
 
+#To show the output of 5 movie suggestions in 5 different columns
 selected_movie_name = st.selectbox(
     'How would you like to be contacted?',
     movies['title'].values)
